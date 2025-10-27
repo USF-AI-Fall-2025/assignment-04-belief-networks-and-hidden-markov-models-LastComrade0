@@ -1,7 +1,7 @@
-from pgmpy.models import BayesianNetwork
+from pgmpy.models import DiscreteBayesianNetwork
 from pgmpy.inference import VariableElimination
 
-alarm_model = BayesianNetwork(
+alarm_model = DiscreteBayesianNetwork(
     [
         ("Burglary", "Alarm"),
         ("Earthquake", "Alarm"),
@@ -58,3 +58,26 @@ alarm_infer = VariableElimination(alarm_model)
 
 q = alarm_infer.query(variables=["Alarm", "Burglary"],evidence={"MaryCalls":"yes"})
 print(q)
+
+
+def main():
+    print("=== Alarm Network Queries ===")
+
+    # Original Query: John calls given Earthquake
+    q1 = alarm_infer.query(variables=["JohnCalls"], evidence={"Earthquake":"yes"})
+    print("1. P(JohnCalls | Earthquake=yes): \n", q1)
+
+    # New Query 1: Mary calling given that John called
+    q2 = alarm_infer.query(variables=["Alarm"], evidence={"MaryCalls":"yes"})
+    print("\n2. P(Mary Calls | JohnCalls=yes): \n", q2)
+
+    # New Query 2: Both John and Marry calling given Alarm
+    q3 = alarm_infer.query(variables=["JohnCalls", "MaryCalls"], evidence={"Alarm":"yes", "Earthquake":"yes"})
+    print("\n3. P(JohnCalls, MaryCalls | Alarm=yes): \n", q3)
+
+    # New Query 3: Alarm given that Mary called
+    q4 = alarm_infer.query(variables=['Alarm'], evidence={'MaryCalls':'yes'})
+    print("\n4. P(Alarm | MaryCalls=yes): \n", q4)
+
+if __name__ == "__main__":
+    main()
