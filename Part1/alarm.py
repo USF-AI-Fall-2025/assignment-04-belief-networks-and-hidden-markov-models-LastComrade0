@@ -68,11 +68,11 @@ def main():
     print("1. P(JohnCalls | Earthquake=yes): \n", q1)
 
     # New Query 1: Mary calling given that John called
-    q2 = alarm_infer.query(variables=["Alarm"], evidence={"MaryCalls":"yes"})
+    q2 = alarm_infer.query(variables=["MaryCalls"], evidence={"JohnCalls":"yes"})
     print("\n2. P(Mary Calls | JohnCalls=yes): \n", q2)
 
     # New Query 2: Both John and Marry calling given Alarm
-    q3 = alarm_infer.query(variables=["JohnCalls", "MaryCalls"], evidence={"Alarm":"yes", "Earthquake":"yes"})
+    q3 = alarm_infer.query(variables=["JohnCalls", "MaryCalls"], evidence={"Alarm":"yes"})
     print("\n3. P(JohnCalls, MaryCalls | Alarm=yes): \n", q3)
 
     # New Query 3: Alarm given that Mary called
